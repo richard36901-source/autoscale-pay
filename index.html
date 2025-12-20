@@ -10,7 +10,6 @@
   <style>
     :root{
       --bg:#0f1115;
-      --card:#151821;
       --panel:#10131a;
       --border:#262a33;
       --text:#e5e7eb;
@@ -58,24 +57,45 @@
       margin-top:16px;
     }
 
+    /* titles stay centered */
     .title{
       font-weight:800;
       margin-bottom:14px;
+      text-align:center;
     }
 
-    .row{
+    /* content blocks are right-aligned */
+    .content-right{
+      text-align:right;
+    }
+
+    /* bank rows */
+    .kvrow{
       display:flex;
-      justify-content:space-between;
       align-items:center;
-      font-size:14px;
+      justify-content:flex-start; /* rtl: start is right */
+      gap:10px;
       padding:6px 0;
+      font-size:14px;
     }
 
-    .label{color:var(--muted)}
-    .value{font-weight:700}
+    .label{
+      color:var(--muted);
+      min-width:90px;
+    }
+
+    .value{
+      font-weight:700;
+    }
+
+    /* copy controls should stick to the number/value */
+    .copywrap{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
 
     .copy{
-      margin-right:8px;
       width:22px;
       height:22px;
       border:1px solid rgba(255,255,255,.2);
@@ -86,19 +106,23 @@
       cursor:pointer;
       font-size:12px;
       color:var(--muted);
+      flex:0 0 auto;
     }
 
-    .copy:hover{border-color:var(--blue);color:var(--blue)}
+    .copy:hover{
+      border-color:var(--blue);
+      color:var(--blue);
+    }
 
     .ok{
       font-size:12px;
       color:var(--ok);
-      margin-right:6px;
       display:none;
+      font-weight:900;
     }
-
     .ok.show{display:inline}
 
+    /* centered buttons */
     .btn{
       display:inline-block;
       padding:14px 36px;
@@ -119,18 +143,32 @@
       background:linear-gradient(180deg,#25D366,#1da851);
       box-shadow:0 10px 26px rgba(0,0,0,.6);
     }
+
+    .center{
+      text-align:center;
+    }
   </style>
 
   <script>
     async function copy(text,id){
-      await navigator.clipboard.writeText(text);
+      try{
+        await navigator.clipboard.writeText(text);
+      }catch(e){
+        const ta=document.createElement("textarea");
+        ta.value=text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
       const el=document.getElementById(id);
+      if(!el) return;
       el.classList.add("show");
       setTimeout(()=>el.classList.remove("show"),1200);
     }
 
     window.onload=()=>{
-      const name=new URLSearchParams(location.search).get("name")||"";
+      const name=new URLSearchParams(location.search).get("name")||"_____";
       const msg=`היי, זה ${name} ביצעתי תשלום מצרף אסמכתא`;
       document.getElementById("wa").href=
         "https://wa.me/972545764327?text="+encodeURIComponent(msg);
@@ -139,73 +177,91 @@
 </head>
 
 <body>
-<div class="wrap">
-<div class="card">
+  <div class="wrap">
+    <div class="card">
 
-<h1>תשלום</h1>
-<div class="note">יש להוסיף מע״מ</div>
+      <h1>תשלום</h1>
+      <div class="note">יש להוסיף מע״מ</div>
 
-<!-- BANK -->
-<div class="section">
-  <div class="title">העברה בנקאית</div>
+      <!-- BANK -->
+      <div class="section">
+        <div class="title">העברה בנקאית</div>
 
-  <div class="row">
-    <span class="label">שם</span>
-    <span class="value">ריצארד טומסקי</span>
-    <span class="copy" onclick="copy('ריצארד טומסקי','ok1')">⧉</span>
-    <span class="ok" id="ok1">✓</span>
+        <div class="content-right">
+          <div class="kvrow">
+            <div class="label">שם</div>
+            <div class="copywrap">
+              <div class="value">ריצארד טומסקי</div>
+              <span class="copy" onclick="copy('ריצארד טומסקי','ok1')">⧉</span>
+              <span class="ok" id="ok1">✓</span>
+            </div>
+          </div>
+
+          <div class="kvrow">
+            <div class="label">בנק</div>
+            <div class="copywrap">
+              <div class="value">פועלים</div>
+              <span class="copy" onclick="copy('פועלים','ok2')">⧉</span>
+              <span class="ok" id="ok2">✓</span>
+            </div>
+          </div>
+
+          <div class="kvrow">
+            <div class="label">סניף</div>
+            <div class="copywrap">
+              <div class="value">632</div>
+              <span class="copy" onclick="copy('632','ok3')">⧉</span>
+              <span class="ok" id="ok3">✓</span>
+            </div>
+          </div>
+
+          <div class="kvrow">
+            <div class="label">חשבון</div>
+            <div class="copywrap">
+              <div class="value">273277</div>
+              <span class="copy" onclick="copy('273277','ok4')">⧉</span>
+              <span class="ok" id="ok4">✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIT -->
+      <div class="section">
+        <div class="title">Bit</div>
+
+        <div class="content-right">
+          <div class="kvrow" style="justify-content:flex-start;">
+            <div class="copywrap">
+              <div class="value">מספר להעברה בביט: 0545764327</div>
+              <span class="copy" onclick="copy('0545764327','ok5')">⧉</span>
+              <span class="ok" id="ok5">✓</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD -->
+      <div class="section">
+        <div class="title">תשלום באשראי</div>
+        <div class="center">
+          <a class="btn btn-blue" href="https://mrng.to/qEDloOpwYy" target="_blank" rel="noopener">
+            לתשלום באשראי
+          </a>
+        </div>
+      </div>
+
+      <!-- WHATSAPP -->
+      <div class="section">
+        <div class="title">שליחת אסמכתא</div>
+        <div class="center">
+          <a class="btn btn-wa" id="wa" href="#" target="_blank" rel="noopener">
+            שליחת אסמכתא ב WhatsApp
+          </a>
+        </div>
+      </div>
+
+    </div>
   </div>
-
-  <div class="row">
-    <span class="label">בנק</span>
-    <span class="value">פועלים</span>
-    <span class="copy" onclick="copy('פועלים','ok2')">⧉</span>
-    <span class="ok" id="ok2">✓</span>
-  </div>
-
-  <div class="row">
-    <span class="label">סניף</span>
-    <span class="value">632</span>
-    <span class="copy" onclick="copy('632','ok3')">⧉</span>
-    <span class="ok" id="ok3">✓</span>
-  </div>
-
-  <div class="row">
-    <span class="label">חשבון</span>
-    <span class="value">273277</span>
-    <span class="copy" onclick="copy('273277','ok4')">⧉</span>
-    <span class="ok" id="ok4">✓</span>
-  </div>
-</div>
-
-<!-- BIT -->
-<div class="section">
-  <div class="title">Bit</div>
-
-  <div class="row" style="justify-content:center">
-    <span class="value">מספר להעברה בביט: 0545764327</span>
-    <span class="copy" onclick="copy('0545764327','ok5')">⧉</span>
-    <span class="ok" id="ok5">✓</span>
-  </div>
-</div>
-
-<!-- CARD -->
-<div class="section">
-  <div class="title">תשלום באשראי</div>
-  <a class="btn btn-blue" href="https://mrng.to/qEDloOpwYy" target="_blank">
-    לתשלום באשראי
-  </a>
-</div>
-
-<!-- WHATSAPP -->
-<div class="section">
-  <div class="title">שליחת אסמכתא</div>
-  <a class="btn btn-wa" id="wa" href="#" target="_blank">
-    שליחת אסמכתא ב WhatsApp
-  </a>
-</div>
-
-</div>
-</div>
 </body>
 </html>
