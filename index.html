@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>תשלום</title>
 
+  <link rel="icon" href="favicon.png" />
+
   <style>
     :root{
       --bg:#0f1115;
@@ -13,15 +15,8 @@
       --border:#262a33;
       --text:#e5e7eb;
       --muted:#9ca3af;
-
-      --blue-border:#4f7cff;
-      --blue-top:#2f4dbb;
-      --blue-bottom:#243b8f;
-      --blue-text:#e8eeff;
-
+      --blue:#4f7cff;
       --wa:#25D366;
-      --wa-dark:#1da851;
-
       --ok:#22c55e;
     }
 
@@ -31,10 +26,9 @@
       margin:0;
       min-height:100vh;
       display:flex;
-      align-items:center;
       justify-content:center;
       background:radial-gradient(circle at top,#1a1d24,#0f1115);
-      font-family: Arial, "Heebo", "Rubik", sans-serif;
+      font-family:Arial,"Heebo","Rubik",sans-serif;
       color:var(--text);
     }
 
@@ -49,236 +43,169 @@
       border:1px solid var(--border);
       border-radius:20px;
       padding:28px;
-      box-shadow:0 20px 50px rgba(0,0,0,0.6);
+      box-shadow:0 20px 50px rgba(0,0,0,.6);
       text-align:center;
     }
 
-    h1{
-      margin:0;
-      font-size:24px;
-      font-weight:800;
-      letter-spacing:0.2px;
-    }
-
-    .subnote{
-      margin-top:12px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .divider{
-      height:1px;
-      background:rgba(255,255,255,0.10);
-      margin:20px 0 22px;
-    }
+    h1{margin:0;font-size:24px;font-weight:800}
+    .note{margin-top:12px;font-size:13px;color:var(--muted)}
 
     .section{
       background:var(--panel);
-      border:1px solid rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,.1);
       border-radius:16px;
       padding:18px;
-      margin-bottom:16px;
+      margin-top:16px;
     }
 
     .title{
       font-weight:800;
-      margin:0 0 14px 0;
-      font-size:15px;
-      text-align:center;
-    }
-
-    .kv{
-      text-align:right;
-      font-size:14px;
-      line-height:2;
-      margin:0;
-    }
-
-    .kv b{
-      color:var(--muted);
-      display:inline-block;
-      min-width:120px;
-      font-weight:800;
+      margin-bottom:14px;
     }
 
     .row{
       display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      justify-content:center;
-      margin-top:14px;
+      justify-content:space-between;
+      align-items:center;
+      font-size:14px;
+      padding:6px 0;
     }
 
-    .btn{
-      appearance:none;
-      border:none;
-      border-radius:999px;
-      padding:13px 26px;
-      cursor:pointer;
-      font-weight:800;
-      font-size:14px;
-      text-decoration:none;
+    .label{color:var(--muted)}
+    .value{font-weight:700}
+
+    .copy{
+      margin-right:8px;
+      width:22px;
+      height:22px;
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:6px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      user-select:none;
+      cursor:pointer;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .copy:hover{border-color:var(--blue);color:var(--blue)}
+
+    .ok{
+      font-size:12px;
+      color:var(--ok);
+      margin-right:6px;
+      display:none;
+    }
+
+    .ok.show{display:inline}
+
+    .btn{
+      display:inline-block;
+      padding:14px 36px;
+      border-radius:999px;
+      font-weight:800;
+      text-decoration:none;
+      color:#fff;
+      border:none;
+      cursor:pointer;
     }
 
     .btn-blue{
-      border:1.5px solid var(--blue-border);
-      background:linear-gradient(180deg,var(--blue-top),var(--blue-bottom));
-      color:var(--blue-text);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.25), 0 10px 26px rgba(0,0,0,0.6);
-      transition:transform .15s, filter .15s;
+      background:linear-gradient(180deg,#2f4dbb,#243b8f);
+      box-shadow:0 10px 26px rgba(0,0,0,.6);
     }
-    .btn-blue:hover{filter:brightness(1.1)}
-    .btn-blue:active{transform:translateY(1px)}
 
     .btn-wa{
-      background:linear-gradient(180deg,var(--wa),var(--wa-dark));
-      color:#fff;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.35), 0 10px 26px rgba(0,0,0,0.6);
-      transition:transform .15s, filter .15s;
+      background:linear-gradient(180deg,#25D366,#1da851);
+      box-shadow:0 10px 26px rgba(0,0,0,.6);
     }
-    .btn-wa:hover{filter:brightness(1.08)}
-    .btn-wa:active{transform:translateY(1px)}
-
-    .copied{
-      display:none;
-      font-size:13px;
-      font-weight:900;
-      color:var(--ok);
-      margin-right:6px;
-    }
-    .copied.show{display:inline-block}
   </style>
 
   <script>
-    const WA_NUMBER = "972545764327";
-    const CARD_LINK = "https://mrng.to/qEDloOpwYy";
-
-    const BANK = {
-      name: "ריצארד טומסקי",
-      bank: "פועלים",
-      branch: "632",
-      account: "273277"
-    };
-
-    const BIT_NUMBER = "0545764327";
-
-    function getClientName(){
-      const p = new URLSearchParams(window.location.search);
-      return (p.get("name") || p.get("client") || "").trim() || "_____";
+    async function copy(text,id){
+      await navigator.clipboard.writeText(text);
+      const el=document.getElementById(id);
+      el.classList.add("show");
+      setTimeout(()=>el.classList.remove("show"),1200);
     }
 
-    function init(){
-      const name = getClientName();
-      const msg = `היי, זה ${name} ביצעתי תשלום מצרף אסמכתא`;
-      document.getElementById("waBtn").href =
-        `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+    window.onload=()=>{
+      const name=new URLSearchParams(location.search).get("name")||"";
+      const msg=`היי, זה ${name} ביצעתי תשלום מצרף אסמכתא`;
+      document.getElementById("wa").href=
+        "https://wa.me/972545764327?text="+encodeURIComponent(msg);
     }
-
-    async function copyToClipboard(text, feedbackId){
-      try{
-        await navigator.clipboard.writeText(text);
-      }catch(e){
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-      }
-      const el = document.getElementById(feedbackId);
-      if(el){
-        el.classList.add("show");
-        setTimeout(() => el.classList.remove("show"), 1400);
-      }
-    }
-
-    window.addEventListener("DOMContentLoaded", init);
   </script>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="card">
+<div class="wrap">
+<div class="card">
 
-      <h1>תשלום</h1>
-      <div class="subnote">יש להוסיף מע״מ</div>
+<h1>תשלום</h1>
+<div class="note">יש להוסיף מע״מ</div>
 
-      <div class="divider"></div>
+<!-- BANK -->
+<div class="section">
+  <div class="title">העברה בנקאית</div>
 
-      <!-- BANK FIRST -->
-      <div class="section">
-        <div class="title">העברה בנקאית</div>
-
-        <div class="kv">
-          <div><b>שם:</b> <span id="b_name">ריצארד טומסקי</span></div>
-          <div><b>בנק:</b> <span id="b_bank">פועלים</span></div>
-          <div><b>סניף:</b> <span id="b_branch">632</span></div>
-          <div><b>חשבון:</b> <span id="b_account">273277</span></div>
-        </div>
-
-        <div class="row">
-          <button class="btn btn-blue" onclick="copyToClipboard(BANK.name,'c_name')">העתק שם</button>
-          <button class="btn btn-blue" onclick="copyToClipboard(BANK.bank,'c_bank')">העתק בנק</button>
-          <button class="btn btn-blue" onclick="copyToClipboard(BANK.branch,'c_branch')">העתק סניף</button>
-          <button class="btn btn-blue" onclick="copyToClipboard(BANK.account,'c_account')">העתק חשבון</button>
-        </div>
-
-        <div style="margin-top:10px;text-align:center;">
-          <span class="copied" id="c_name">✓ הועתק</span>
-          <span class="copied" id="c_bank">✓ הועתק</span>
-          <span class="copied" id="c_branch">✓ הועתק</span>
-          <span class="copied" id="c_account">✓ הועתק</span>
-        </div>
-      </div>
-
-      <!-- BIT -->
-      <div class="section">
-        <div class="title">Bit</div>
-
-        <div class="kv" style="text-align:center;">
-          <div><b style="min-width:auto;">מספר להעברה בביט:</b> 0545764327</div>
-        </div>
-
-        <div class="row">
-          <button class="btn btn-blue" onclick="copyToClipboard(BIT_NUMBER,'c_bit')">העתק מספר לביט</button>
-          <span class="copied" id="c_bit">✓ הועתק</span>
-        </div>
-      </div>
-
-      <!-- CARD LAST -->
-      <div class="section">
-        <div class="title">תשלום באשראי</div>
-
-        <div class="row">
-          <a class="btn btn-blue" href="https://mrng.to/qEDloOpwYy" target="_blank" rel="noopener">
-            לתשלום באשראי
-          </a>
-
-          <button class="btn btn-blue" onclick="copyToClipboard(CARD_LINK,'c_card')">
-            העתק לינק אשראי
-          </button>
-
-          <span class="copied" id="c_card">✓ הועתק</span>
-        </div>
-      </div>
-
-      <!-- WHATSAPP RECEIPT -->
-      <div class="section" style="margin-bottom:0;">
-        <div class="title">שליחת אסמכתא</div>
-
-        <div class="row">
-          <a class="btn btn-wa" id="waBtn" href="#" target="_blank" rel="noopener">
-            שליחת אסמכתא ב WhatsApp
-          </a>
-        </div>
-      </div>
-
-    </div>
+  <div class="row">
+    <span class="label">שם</span>
+    <span class="value">ריצארד טומסקי</span>
+    <span class="copy" onclick="copy('ריצארד טומסקי','ok1')">⧉</span>
+    <span class="ok" id="ok1">✓</span>
   </div>
+
+  <div class="row">
+    <span class="label">בנק</span>
+    <span class="value">פועלים</span>
+    <span class="copy" onclick="copy('פועלים','ok2')">⧉</span>
+    <span class="ok" id="ok2">✓</span>
+  </div>
+
+  <div class="row">
+    <span class="label">סניף</span>
+    <span class="value">632</span>
+    <span class="copy" onclick="copy('632','ok3')">⧉</span>
+    <span class="ok" id="ok3">✓</span>
+  </div>
+
+  <div class="row">
+    <span class="label">חשבון</span>
+    <span class="value">273277</span>
+    <span class="copy" onclick="copy('273277','ok4')">⧉</span>
+    <span class="ok" id="ok4">✓</span>
+  </div>
+</div>
+
+<!-- BIT -->
+<div class="section">
+  <div class="title">Bit</div>
+
+  <div class="row" style="justify-content:center">
+    <span class="value">מספר להעברה בביט: 0545764327</span>
+    <span class="copy" onclick="copy('0545764327','ok5')">⧉</span>
+    <span class="ok" id="ok5">✓</span>
+  </div>
+</div>
+
+<!-- CARD -->
+<div class="section">
+  <div class="title">תשלום באשראי</div>
+  <a class="btn btn-blue" href="https://mrng.to/qEDloOpwYy" target="_blank">
+    לתשלום באשראי
+  </a>
+</div>
+
+<!-- WHATSAPP -->
+<div class="section">
+  <div class="title">שליחת אסמכתא</div>
+  <a class="btn btn-wa" id="wa" href="#" target="_blank">
+    שליחת אסמכתא ב WhatsApp
+  </a>
+</div>
+
+</div>
+</div>
 </body>
 </html>
